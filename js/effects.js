@@ -78,8 +78,10 @@ export function applyGrayscale(imageData) {
 
 /**
  * ⚡️ サイバーバグ（グリッチ）
- * ランダムな高さから数十行分のピクセルデータを、
- * ランダムなピクセル数だけ横にシフトさせる。空いた隙間は黒で埋める。
+ * ランダムな高さの行のかたまり（帯）を、ランダムなピクセル数だけ
+ * 横にシフトさせる。空いた隙間は黒で埋める。
+ * 細い帯と太い帯、小さなズレと画面を大きく横切るズレを混ぜて
+ * 「データの並びが壊れた」見た目を大胆に作る。
  * @param {ImageData} imageData
  * @returns {ImageData}
  */
@@ -88,13 +90,23 @@ export function applyGlitch(imageData) {
   const data = result.data;
   const { width, height } = imageData;
 
-  // 3〜6 か所のグリッチ帯をランダムに作る
-  const bandCount = 3 + Math.floor(Math.random() * 4);
+  // 10〜18 か所のグリッチ帯をランダムに作る
+  const bandCount = 10 + Math.floor(Math.random() * 9);
 
   for (let band = 0; band < bandCount; band++) {
     const startY = Math.floor(Math.random() * height);
-    const bandHeight = 10 + Math.floor(Math.random() * 30); // 数十行分
-    const shift = Math.floor((Math.random() - 0.5) * width * 0.4); // 左右どちらかにシフト
+    // 7割は数ピクセルの細い帯、3割は太い帯（最大80px）にする
+    const bandHeight =
+      Math.random() < 0.7
+        ? 2 + Math.floor(Math.random() * 14)
+        : 30 + Math.floor(Math.random() * 51);
+    // 25%の確率で画像幅の30〜55%を横切る「大ズレ」、それ以外は5〜30%のズレ
+    const shiftRatio =
+      Math.random() < 0.25
+        ? 0.3 + Math.random() * 0.25
+        : 0.05 + Math.random() * 0.25;
+    const direction = Math.random() < 0.5 ? -1 : 1;
+    const shift = direction * Math.floor(width * shiftRatio);
     const endY = Math.min(startY + bandHeight, height);
 
     for (let y = startY; y < endY; y++) {
