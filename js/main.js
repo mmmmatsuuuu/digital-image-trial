@@ -8,6 +8,7 @@ import {
   applyGlitch,
 } from "./effects.js";
 import { effectContents } from "./content.js";
+import { createDiagram } from "./diagrams.js";
 
 // ---- DOM 要素の取得 ----
 const fileInput = document.getElementById("file-input");
@@ -115,6 +116,9 @@ function renderExplanationSections(sections) {
     text.textContent = section.text;
 
     block.append(label, text);
+    if (section.diagram) {
+      block.append(createDiagram(section.diagram));
+    }
     explanationSections.append(block);
   }
 }
