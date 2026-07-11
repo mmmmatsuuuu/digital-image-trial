@@ -6,9 +6,10 @@
  * 色見本（スウォッチ）とRGB値ラベルの縦ブロックを作る
  * @param {{r: number, g: number, b: number}} rgb
  * @param {string} caption 見本の下に出す説明（例:「もとの色」）
+ * @param {{r: string, g: string, b: string}} [bits] 各色の2進数表記（あれば併記する）
  * @returns {HTMLElement}
  */
-function createSwatch(rgb, caption) {
+function createSwatch(rgb, caption, bits) {
   const wrap = document.createElement("div");
   wrap.className = "flex flex-col items-center gap-1";
 
@@ -24,7 +25,17 @@ function createSwatch(rgb, caption) {
   label.className = "text-[10px] font-bold text-gray-400";
   label.textContent = caption;
 
-  wrap.append(box, values, label);
+  wrap.append(box, values);
+
+  if (bits) {
+    const bitLines = document.createElement("p");
+    bitLines.className =
+      "whitespace-pre text-center font-mono text-[9px] leading-tight text-cyan-300/80";
+    bitLines.textContent = `R=${bits.r}\nG=${bits.g}\nB=${bits.b}`;
+    wrap.append(bitLines);
+  }
+
+  wrap.append(label);
   return wrap;
 }
 
@@ -154,9 +165,9 @@ export function createDiagram(diagram) {
     // 色→計算→色（ダークモード・レトロ白黒）
     case "color-calc":
       container.append(
-        createSwatch(diagram.before, "もとの色"),
+        createSwatch(diagram.before, "もとの色", diagram.beforeBits),
         createArrow(diagram.formulas),
-        createSwatch(diagram.after, "計算後の色")
+        createSwatch(diagram.after, "計算後の色", diagram.afterBits)
       );
       break;
 
