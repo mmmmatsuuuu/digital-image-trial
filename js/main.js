@@ -18,7 +18,7 @@ const ctx = canvas.getContext("2d");
 const controlArea = document.getElementById("control-area");
 const explanationArea = document.getElementById("explanation-area");
 const explanationTitle = document.getElementById("explanation-title");
-const explanationText = document.getElementById("explanation-text");
+const explanationSections = document.getElementById("explanation-sections");
 const actionArea = document.getElementById("action-area");
 const saveButton = document.getElementById("save-button");
 const resetButton = document.getElementById("reset-button");
@@ -98,6 +98,28 @@ fileInput.addEventListener("change", (event) => {
 // ---- エフェクトボタンの処理 ----
 
 /**
+ * 解説エリアに「ワークとのつながり／しくみ／身近な例」の段落を組み立てる
+ * @param {{label: string, text: string}[]} sections
+ */
+function renderExplanationSections(sections) {
+  explanationSections.textContent = "";
+  for (const section of sections) {
+    const block = document.createElement("div");
+
+    const label = document.createElement("p");
+    label.className = "text-xs font-bold text-purple-300 mb-1";
+    label.textContent = section.label;
+
+    const text = document.createElement("p");
+    text.className = "text-sm leading-relaxed text-gray-200";
+    text.textContent = section.text;
+
+    block.append(label, text);
+    explanationSections.append(block);
+  }
+}
+
+/**
  * エフェクトを適用し、解説文を表示する
  * @param {string} effectName effects の対応表のキー
  */
@@ -112,7 +134,7 @@ function handleEffect(effectName) {
   // 解説文をふわっと表示する
   const content = effectContents[effectName];
   explanationTitle.textContent = content.title;
-  explanationText.textContent = content.description;
+  renderExplanationSections(content.sections);
   explanationArea.classList.remove("hidden");
   // リフローを挟んでアニメーションを最初から再生し直す
   explanationArea.classList.remove("animate-fade-in-up");
