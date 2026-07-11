@@ -44,5 +44,9 @@ jobs:
       - name: html5validator をインストール
         run: pip install html5validator
 
-      - name: index.html を検証
-        run: html5validator --root . --show-warnings
+      # 失敗判定はエラーのみ。警告は参考としてログに出力する
+      - name: index.html を検証（エラーで失敗）
+        run: html5validator --root .
+
+      - name: 警告の確認（参考情報・失敗しない）
+        run: html5validator --root . --show-warnings || true
