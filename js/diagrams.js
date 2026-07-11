@@ -70,21 +70,23 @@ function createCell(color, text = "", textColor = "#fff") {
 }
 
 /**
- * 0/1のマスが並んだ1行を作る（1=黒、0=白）
- * @param {number[]} bits
+ * 4階調（2ビット）のマスが並んだ1行を作る
+ * 00=黒 〜 11=白（数字が大きいほど明るい）
+ * @param {string[]} codes 2ビットの数字（"00"〜"11"）の並び
  * @param {string} caption
  * @returns {HTMLElement}
  */
-function createBitRow(bits, caption) {
+function createGrayCodeRow(codes, caption) {
   const wrap = document.createElement("div");
   wrap.className = "flex flex-col items-center gap-1";
 
   const row = document.createElement("div");
   row.className = "flex gap-0.5";
-  for (const bit of bits) {
-    row.append(
-      bit === 1 ? createCell("#111827", "1", "#fff") : createCell("#f9fafb", "0", "#111")
-    );
+  for (const code of codes) {
+    const level = parseInt(code, 2); // 0〜3
+    const value = level * 85; // 4階調を0〜255に換算
+    const textColor = level >= 2 ? "#111" : "#fff";
+    row.append(createCell(`rgb(${value}, ${value}, ${value})`, code, textColor));
   }
 
   const label = document.createElement("p");
@@ -158,12 +160,12 @@ export function createDiagram(diagram) {
       );
       break;
 
-    // 0/1の行の並べかえ（左右はんてん）
+    // 4階調のマスの行の並べかえ（左右はんてん）
     case "row-reverse":
       container.append(
-        createBitRow(diagram.bits, "もとの行"),
+        createGrayCodeRow(diagram.codes, "もとの行"),
         createArrow(diagram.formulas),
-        createBitRow([...diagram.bits].reverse(), "並べかえたあと")
+        createGrayCodeRow([...diagram.codes].reverse(), "並べかえたあと")
       );
       break;
 
@@ -182,6 +184,15 @@ export function createDiagram(diagram) {
         )
       );
       break;
+  }
+
+  // 図の下に添える補足（2進数での見え方など）
+  if (diagram.caption) {
+    const caption = document.createElement("p");
+    caption.className =
+      "w-full text-center text-[10px] leading-relaxed text-cyan-300/90";
+    caption.textContent = diagram.caption;
+    container.append(caption);
   }
 
   return container;
