@@ -40,7 +40,7 @@
     </header>
 
     <!-- 2. アップロードエリア -->
-    <section class="rounded-2xl border-2 border-dashed border-cyan-500/60 bg-gray-800/60 p-6 text-center neon-border">
+    <div class="rounded-2xl border-2 border-dashed border-cyan-500/60 bg-gray-800/60 p-6 text-center neon-border">
       <p class="mb-4 text-lg font-bold text-cyan-300">📷 まずは画像をえらぼう</p>
       <label for="file-input"
         class="inline-block cursor-pointer rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 font-bold text-white shadow-lg transition hover:scale-105 hover:shadow-cyan-500/40 active:scale-95">
@@ -48,17 +48,17 @@
       </label>
       <input type="file" id="file-input" accept="image/*" class="hidden" />
       <p id="upload-area" class="mt-3 text-xs text-gray-500">スマホならカメラで撮った写真も使えるよ</p>
-    </section>
+    </div>
 
     <!-- 3. ワークスペース（Canvas） -->
-    <section id="workspace" class="hidden rounded-2xl bg-gray-800/80 p-4 neon-border">
+    <div id="workspace" class="hidden rounded-2xl bg-gray-800/80 p-4 neon-border">
       <div class="flex justify-center">
         <canvas id="canvas" class="max-w-full rounded-lg shadow-2xl"></canvas>
       </div>
-    </section>
+    </div>
 
     <!-- 4. コントロールエリア -->
-    <section id="control-area" class="hidden">
+    <div id="control-area" class="hidden">
       <p class="mb-3 text-center text-sm font-bold text-purple-300">✨ ボタンを押して魔法をかけよう ✨</p>
       <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <button data-effect="invert"
@@ -78,17 +78,17 @@
           ⚡️<br>サイバーバグ
         </button>
       </div>
-    </section>
+    </div>
 
     <!-- 5. 解説エリア（動的表示） -->
     <section id="explanation-area" class="hidden animate-fade-in-up rounded-2xl border-l-4 border-cyan-400 bg-gray-800/80 p-5 neon-border">
-      <h2 id="explanation-title" class="mb-3 text-lg font-bold text-cyan-300"></h2>
+      <h2 id="explanation-title" class="mb-3 text-lg font-bold text-cyan-300">エフェクトの解説</h2>
       <div id="explanation-sections" class="flex flex-col gap-3"></div>
       <p class="mt-3 text-xs text-purple-300/80">💡 これが高校「情報Ⅰ」で学ぶ、デジタルデータの世界！</p>
     </section>
 
     <!-- 6. アクションエリア -->
-    <section id="action-area" class="hidden flex flex-col items-center gap-3">
+    <div id="action-area" class="hidden flex flex-col items-center gap-3">
       <button id="save-button"
         class="w-full max-w-xs rounded-full bg-gradient-to-r from-emerald-500 to-cyan-600 px-8 py-3 font-bold text-white shadow-lg transition hover:scale-105 hover:shadow-emerald-500/40 active:scale-95">
         💾 加工した画像を保存する
@@ -97,7 +97,7 @@
         class="text-sm text-gray-400 underline underline-offset-4 transition hover:text-gray-200">
         🔄 さいしょの画像に戻す
       </button>
-    </section>
+    </div>
 
     <footer class="pb-4 text-center text-xs text-gray-600">
       体験入学お土産サイト — 画像のデジタル化体験
