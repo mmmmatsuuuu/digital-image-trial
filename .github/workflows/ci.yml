@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  js-syntax-check:
+    name: JS構文チェック
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # ES Modules のため --input-type=module を指定して構文検証する
+      - name: node --check で全モジュールを検証
+        run: |
+          status=0
+          for f in $(find js -name '*.js' | sort); do
+            if node --check --input-type=module < "$f"; then
+              echo "OK: $f"
+            else
+              echo "NG: $f"
+              status=1
+            fi
+          done
+          exit $status
+
+  html-validation:
+    name: HTMLバリデーション
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Nu HTML Checker (W3C公式チェッカー) のCLIラッパー
+      - name: html5validator をインストール
+        run: pip install html5validator
+
+      - name: index.html を検証
+        run: html5validator --root . --show-warnings
